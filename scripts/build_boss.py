@@ -32,7 +32,7 @@ for k,nm,stg,pos,sc,flag in BOSS:
         return a
     base_c=[ST,C('boss_stage',stg)]
     pg=lambda t:{"id":f'{eid}-t{t}',"name":f'第{t}輪',"conditions":base_c+[C('boss_round',t,'gte')],"actor":"npc","sprite":s,"movement":"approach","approach":20,"direction":"left","solid":True,"trigger":"touch","once":False,"actions":acts(t)}
-    pages=[pg(t) for t in range(2,7)]
+    pages=[pg(t) for t in range(2,11)]
     if flag: pages.append({"id":f'{eid}-down',"name":"倒下","conditions":base_c+[C(flag+'_down','true')],"actor":"none","sprite":s,"movement":"still","solid":False,"trigger":"action","once":False,"actions":[]})
     ops.append({"kind":"event","id":eid,"patch":{"name":nm+"（Boss）","x":x,"y":y,"actor":"npc","kind":"monster","sprite":s,"movement":"approach","approach":20,"direction":"left","solid":True,"trigger":"touch","once":False,"conditions":base_c+[],"actions":acts(1),"pages":pages,
         "badge":{"icon":"crown","color":"#d23c3c"}}})
@@ -42,9 +42,14 @@ def dir_(eid,nm,conds,acts):
 FX=lambda p:[z(id=p+'-snd',kind="sound",audio={"url":"","sound":"roar","volume":0.9}),z(id=p+'-shk',kind="screen",screen={"effect":"shake","strength":0.6,"durationMs":700,"wait":False})]
 SAY=lambda p,t:z(id=p+'-say',kind="dialogue",text=t,speaker="narrator",presentation="text")
 for stg,gap,line in [(0,40,'虎牢關前，劉備、關羽、張飛三人一起殺到。'),(2,50,'董卓現身。'),(4,60,'曹操領兵來到濮陽。'),(6,70,'紀靈率袁術軍殺到。'),(8,80,'下邳城外，曹操親自來了。')]:
-    p=f'dir-{stg+1}'; dir_(p,f'Boss 出場 {stg+1}',[C('boss_stage',stg),C('bk',gap,'gte')],[V(p+'-v','boss_stage',stg+1)]+FX(p)+[SAY(p,line)])
+    p=f'dir-{stg+1}'; dir_(p,f'Boss 出場 {stg+1}',[C('boss_round',1),C('boss_stage',stg),C('bk',gap,'gte')],[V(p+'-v','boss_stage',stg+1)]+FX(p)+[SAY(p,line)])
 dir_('dir-sy','三英全倒',[C('boss_stage',1),C('sanying_down',3,'gte')],[V('dsy-1','boss_stage',2),V('dsy-2','bk',0),V('dsy-3','sanying_down',0),V('dsy-4','liu_down','false'),V('dsy-5','guan_down','false'),V('dsy-6','zhang_down','false')])
-dir_('dir-loop','無雙下一輪',[C('boss_stage',10)],[V('dl-1','boss_stage',0),V('dl-2','bk',0),V('dl-3','boss_round',1,'add')]+FX('dl')+[SAY('dl','無雙！五員大將捲土重來，這一輪更強。')])
+dir_('dir-loop','無雙下一輪',[C('boss_stage',10)],[V('dl-1','boss_stage',0),V('dl-2','bk',0),V('dl-3','boss_round',1,'add')]+FX('dl')+[SAY('dl','五員大將都倒下了。無雙開始，接下來的每一位都更強。')])
+NAMES=[(1,'劉備、關羽、張飛'),(3,'董卓'),(5,'曹操'),(7,'紀靈'),(9,'下邳的曹操')]
+dir_('dir-musou','無雙 隨機出王',[C('boss_round',2,'gte'),C('boss_stage',0),C('bk',40,'gte')],
+  [z(id='dm-r',kind="random",random={"min":1,"max":5,"options":[{"id":f"dm-o{i}","label":nm,"from":i+1,"to":i+1,"actions":[V(f'dm-v{i}','boss_stage',stg),SAY(f'dm{i}',f'無雙！{nm}殺到，比上一位更強。')]} for i,(stg,nm) in enumerate(NAMES)]})]+FX('dm'))
+for stg in (2,4,6,8):
+    dir_(f'dir-next{stg}',f'無雙 下一位 {stg}',[C('boss_round',2,'gte'),C('boss_stage',stg)],[V(f'dn{stg}-1','boss_stage',0),V(f'dn{stg}-2','bk',0),V(f'dn{stg}-3','boss_round',1,'add')])
 RESET=lambda p:[V(p+'-r1','boss_stage',0),V(p+'-r2','bk',0),V(p+'-r3','boss_round',1),V(p+'-r4','sanying_down',0),V(p+'-r5','liu_down','false'),V(p+'-r6','guan_down','false'),V(p+'-r7','zhang_down','false')]
 ev={e['id']:e for e in m['events']}
 # init-score
@@ -74,7 +79,7 @@ G=[{"text":t,"eventId":eid,"conditions":c} for t,eid,c in [
  ('濮陽：曹操來了，他會架起防守','boss-caocao1',[C('boss_stage',5)]),
  ('淮北：紀靈率袁術軍殺到','boss-jiling',[C('boss_stage',7)]),
  ('下邳決戰：曹操親至','boss-caocao2',[C('boss_stage',9)]),
- ('無雙模式：五員大將輪番再戰，一輪比一輪強','reaper',[C('boss_round',2,'gte')])]]
+ ('無雙模式：五員大將隨機殺到，一位比一位強','reaper',[C('boss_round',2,'gte')])]]
 old=[g for g in m.get('guidance',[]) if g['eventId'] not in [x['eventId'] for x in G]]
 ops.append({"kind":"settings","patch":{"guidance":G+old}})
 json.dump(ops,open('ops_boss.json','w'),ensure_ascii=False)

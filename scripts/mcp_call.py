@@ -5,7 +5,13 @@ H={'Authorization':'Bearer '+K,'Content-Type':'application/json','Accept':'appli
 def post(body,sid=None):
     h=dict(H); 
     if sid: h['Mcp-Session-Id']=sid
-    r=urllib.request.urlopen(urllib.request.Request(U,data=json.dumps(body).encode(),headers=h,method='POST'),timeout=300)
+    import time
+    for t in range(8):
+        try:
+            r=urllib.request.urlopen(urllib.request.Request(U,data=json.dumps(body).encode(),headers=h,method='POST'),timeout=300); break
+        except urllib.error.HTTPError as e:
+            if e.code!=429 or t==7: raise
+            time.sleep(30)
     raw=r.read().decode(); sid2=r.headers.get('Mcp-Session-Id') or sid
     if raw.lstrip().startswith('event:') or 'data:' in raw[:20]:
         raw='\n'.join(l[5:] for l in raw.splitlines() if l.startswith('data:'))
