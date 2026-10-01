@@ -2,6 +2,8 @@
 
 ![封面](assets/cover/cover.webp)
 
+**直接玩**：<https://larch.ink/play/market/74fc7b5a-22ff-42e3-980b-5bdd3701bfff>
+
 在 [Larch](https://larch.ink) 的 RPG 系統上做的除草小遊戲。同一張 64×64 的戰場，敵兵和妖物一波一波湧上來，挑一位角色上陣，撐得越久，來的越強。
 
 做這個是想試試 Larch 剛加的 RPG 系統能不能撐起一款「無雙」類的即時戰鬥小遊戲。這個 repo 放的是做遊戲時用到的腳本、素材，以及整個專案的設定快照，想在 Larch 上做類似東西的人可以直接拿去參考。
