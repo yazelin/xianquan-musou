@@ -56,3 +56,13 @@
 ## 工具
 
 - `larch_rpg_edit` 沒有 REST 版，操作 JSON 太大時可以照 `scripts/mcp_call.py` 直接對 `https://larch.ink/mcp` 發 JSON-RPC（Bearer 金鑰，Accept 要帶 `application/json, text/event-stream`）。
+
+## 隊伍
+
+- party 步驟的狀態有三種：`follow`（跟在身邊）、`stay`（算在隊上、會拿經驗，但不跟著也不上場）、`leave`。
+- 打倒敵人的經驗不平分，每個在隊上的人（包含 stay）都拿全額。本作開局就把四位隊友設成 stay，讓她們在後方一起升級，招募時改成 follow。
+- 全隊共用一條 HP 與 MP。怪只打帶隊的人，隊友沒有血、不會受傷。
+- 隊友自己出手：斬擊類打相鄰一格、約 1.3 秒一次；弓與法術打 5 格內、2.3／3.2 秒一次，傷害約帶隊者的一半。
+- 隊上有 kit 為 mage 的人，帶隊者血量低於 55% 時每 9 秒補 12%。
+- kit 為 archer／mage 的角色若沒設 gear，第一次上路會自動拿到內建的弓或法杖並放進背包，所以本作每個角色都設 `gear: {}`。
+- choice 至少要兩個選項，只剩一位可選時改成直接加入。
