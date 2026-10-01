@@ -35,7 +35,7 @@ for k in range(1,5):
         for joined in itertools.combinations(others,k-1):
             pid=f'r{k}-{h}-'+('-'.join(joined) or 'none')
             avail=[a for a in others if a not in joined]
-            opts=[{"id":f'{pid}-o-{a}',"label":f'{NM[a]} 加入',"actions":[z(id=f'{pid}-p-{a}',kind="party",value=a,party="follow"),V(f'{pid}-v-{a}','joined_'+a,'true')]} for a in avail]
+            opts=[{"id":f'{pid}-o-{a}',"label":f'{NM[a]} 加入',"actions":[z(id=f'{pid}-p-{a}',kind="party",value=a,party="follow"),V(f'{pid}-v-{a}','joined_'+a,'true'),z(id=f'{pid}-s-{a}',kind="sound",audio={"url":"","sound":"chime","volume":0.9}),z(id=f'{pid}-b-{a}',kind="balloon",balloon={"icon":"happy","target":"player","durationMs":2400})]} for a in avail]
             conds=[C('started','true'),C('boss_round',1),C('boss_stage',2*k),C('recruited_n',k-1),C('cur_hero',h)]+[C('joined_'+a,'true' if a in joined else 'false') for a in others]
             pages.append({"id":pid,"name":f"第{k}位：{NM[h]}帶隊","conditions":conds,"actor":"none","sprite":{"url":"","width":32,"height":32,"frames":1,"rows":1,"offsetX":0,"offsetY":0,"idleFrame":0},
                "movement":"still","solid":False,"trigger":"parallel","once":False,
