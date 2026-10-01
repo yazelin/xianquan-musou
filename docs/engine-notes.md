@@ -41,3 +41,18 @@
 ## 平台問題
 
 - 存線上設定（`online`）時，快捷語第 i 句會被截成 i 個字，而且存檔檢查發現結果不同就整批拒絕，所以自訂快捷語存不進去。
+
+## 數值與等級
+
+- 戰鬥卡敵人的 HP、攻擊上限都是 9999。
+- 升到 L 級要的經驗是 `18 × (L−1)^1.8`（pace normal；fast 12、slow 26），跟等級上限無關。
+- 打倒一場戰鬥拿到的經驗是每個敵人 `HP/3 + 攻擊×1.5 + 防禦` 加總。
+- growth 的能力值是在第 1 級和最高級之間照曲線內插，所以改 maxLevel 會把整條曲線拉長。想維持某一級的數值，要一起改最高級那端（本作把 30 改 99 時，每項的最高值改成 `起點 + (原最高 − 起點) × 98/29`）。
+- 事件條件讀不到主角等級，本作的 Boss 用「上一位 Boss 倒下後的擊殺數」（變數 bk）當門檻。
+- wait 步驟最長 9999 毫秒，要更久就連放幾個。
+- 道具的 `effects` 可以放 `{"kind":"mana","amount":N}`，按快捷鍵就回 MP。
+- 動作地圖上被打倒、不是 once 的怪，過 `respawn` 秒後會在原位復活（主角要離它 5 格以上）；條件不成立時不會出現，所以 Boss 靠 `boss_stage` 變數控制出場。
+
+## 工具
+
+- `larch_rpg_edit` 沒有 REST 版，操作 JSON 太大時可以照 `scripts/mcp_call.py` 直接對 `https://larch.ink/mcp` 發 JSON-RPC（Bearer 金鑰，Accept 要帶 `application/json, text/event-stream`）。
