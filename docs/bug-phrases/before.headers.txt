@@ -1,0 +1,19 @@
+HTTP/2 200 
+access-control-allow-credentials: true
+access-control-expose-headers: ETag,X-Larch-Revision
+cache-control: private, no-store
+content-security-policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self' https: wss:; frame-src 'self' blob: https:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https:; frame-ancestors 'self'
+content-type: application/json; charset=utf-8
+date: Thu, 01 Oct 2026 16:59:34 GMT
+etag: W/"418-jIBY622gT9rb+T6VyRkLjzP1ERs"
+permissions-policy: camera=(), microphone=*, geolocation=()
+referrer-policy: strict-origin-when-cross-origin
+server: railway-hikari
+strict-transport-security: max-age=31536000; includeSubDomains
+vary: Origin, Accept-Encoding
+x-content-type-options: nosniff
+x-frame-options: SAMEORIGIN
+x-railway-request-id: 7fsKqrCSRAelF9AtAQeqjw
+x-railway-edge: hkg1
+x-hikari-trace: hkg1.aebn
+

@@ -1,0 +1,1 @@
+{"error":"RPG 設定沒有儲存：online.phrases：送出 [\"aaaaa\",\"bbbbb\",\"ccccc\",\"ddddd\",\"eeeee\",\"fffff\"]，會變成 [\"b\",\"cc\",\"ddd\",\"eeee\",\"fffff\"]。欄位與範圍見 larch_rpg_spec 的 Game settings；null 會把欄位還原成預設。"}

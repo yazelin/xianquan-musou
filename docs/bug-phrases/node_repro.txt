@@ -1,0 +1,2 @@
+map(As)         ["b","cc","ddd","eeee","fffff"]
+map(x=>As(x))   ["aaaaa","bbbbb","ccccc","ddddd","eeeee","fffff"]
