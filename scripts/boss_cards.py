@@ -4,16 +4,16 @@ base='https://larch.ink/api/agent/projects/project-e35e734b-478d-458b-9221-294f8
 def rev():
     r=urllib.request.urlopen(urllib.request.Request(base+'/boards/board-main',headers={'Authorization':'Bearer '+K})); return r.headers.get('X-Larch-Revision')
 B={ # id: name, hp, atk, def, specials
- 'liubei':('劉備',350,40,4,[{"kind":"heal","name":"仁德","below":40,"amount":80,"times":2}]),
- 'guanyu':('關羽',400,48,5,[{"kind":"strike","name":"青龍斬","every":4,"power":2}]),
- 'zhangfei':('張飛',380,44,3,[{"kind":"double","name":"燕人連突","every":3}]),
- 'dongzhuo':('董卓',2000,75,8,[{"kind":"strike","name":"西涼鐵騎","every":4,"power":2},{"kind":"enrage","name":"暴怒","below":30,"power":1.5}]),
- 'caocao1':('曹操',2500,100,12,[{"kind":"guard","name":"堅守","every":4},{"kind":"strike","name":"虎豹騎","every":5,"power":2}]),
+ 'liubei':('劉備',350,40,4,[{"kind":"heal","name":"桃園之誓","below":40,"amount":80,"times":2}]),
+ 'guanyu':('關羽',400,48,5,[{"kind":"strike","name":"溫酒斬","every":4,"power":2}]),
+ 'zhangfei':('張飛',380,44,3,[{"kind":"double","name":"燕人張翼德","every":3}]),
+ 'dongzhuo':('董卓',2000,75,8,[{"kind":"strike","name":"西涼鐵騎","every":4,"power":2},{"kind":"enrage","name":"焚洛陽","below":30,"power":1.5}]),
+ 'caocao1':('曹操',2500,100,12,[{"kind":"guard","name":"典韋護駕","every":4},{"kind":"strike","name":"虎豹騎","every":5,"power":2}]),
  'jiling':('紀靈',3000,130,14,[{"kind":"double","name":"三尖連斬","every":3},{"kind":"enrage","name":"死戰","below":30,"power":1.5}]),
- 'caocao2':('曹操・下邳',5000,170,18,[{"kind":"strike","name":"水淹下邳","every":4,"power":2},{"kind":"heal","name":"重整","below":30,"amount":800,"times":1},{"kind":"enrage","name":"決戰","below":20,"power":1.6}]),
+ 'caocao2':('曹操・下邳',5000,170,18,[{"kind":"strike","name":"水淹下邳","every":4,"power":2},{"kind":"heal","name":"郭嘉獻策","below":30,"amount":800,"times":1},{"kind":"enrage","name":"縛虎急","below":20,"power":1.6}]),
 }
 NUM=['','貳','參','肆','伍','陸','柒','捌','玖','拾']
-todo=[(k,t) for k in B for t in range(7,11)]
+todo=[(k,t) for k in B for t in range(1,11)]   # 2026-10-02 招名改版，十階全部重推
 if len(sys.argv)>1: todo=[(sys.argv[1],int(sys.argv[2]))]
 y=0
 for k,t in todo:

@@ -54,6 +54,14 @@
 - 道具的 `effects` 可以放 `{"kind":"mana","amount":N}`，按快捷鍵就回 MP。
 - 動作地圖上被打倒、不是 once 的怪，過 `respawn` 秒後會在原位復活（主角要離它 5 格以上）；條件不成立時不會出現，所以 Boss 靠 `boss_stage` 變數控制出場。
 
+## 對話卡與海報（2026-10-02）
+
+- 地圖事件的 dialogue 步驟連到對話卡（cardId）時，卡片的 `background` 會鋪滿畫面當背景、對話框疊在下方。王出場海報就是這樣做的（`scripts/poster_cards.py`）。
+- 背景是 `object-fit: cover`：等比縮放到填滿畫面，比畫面寬的部分左右裁掉。圖做成 16:9、重要的東西放中間，下方三分之一會被對話框蓋住。
+- 白板卡片的內容要包在 `data` 裡。`larch_upsert_nodes` 收的是原始卡片結構，把欄位攤平送會被原樣存下，播放器就讀不到（顯示「找不到連結的對話卡」）。
+- `rpg-battle` 接口的 `create: true` 不會覆蓋已存在的卡（回 409）。整批改戰鬥卡（例如招式名稱）用整個白板讀出、改 `data.pluginValues.battle`、再 PUT 回去（`scripts/rename_moves.py`），完成後讀回逐張比對。
+- 王在大地圖上放招的畫面效果寫死在平台：固定顏色的粒子、震動、吼聲、頭上飄招式名稱。作者能改的是招名、招式種類與數值。
+
 ## 工具
 
 - `larch_rpg_edit` 沒有 REST 版，操作 JSON 太大時可以照 `scripts/mcp_call.py` 直接對 `https://larch.ink/mcp` 發 JSON-RPC（Bearer 金鑰，Accept 要帶 `application/json, text/event-stream`）。
