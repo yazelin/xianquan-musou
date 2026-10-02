@@ -23,6 +23,7 @@ boards=json.loads(json.dumps(p['boards'])); keep={k:canon(p.get(k)) for k in ('c
 for l in p['settings']['titleScreen']['layers']:
     if l['kind']=='button': l['skin']=SKIN; l['width']=18; l['x']=79; l['size']=1.7
     if l['kind']=='language': l['x']=79
+    l['y']={'action-start':74,'action-continue':83,'languages':92}.get(l['id'],l.get('y'))   # 作者 10-02：兩顆按鈕疊在一起
 et,_=req('PUT','',{"project":p,"summary":"標題按鈕加黑金底板"},et)
 for b in boards: et,_=req('PUT','/boards/'+b['id'],{"name":b['name'],"nodes":b['nodes'],"edges":b['edges'],"summary":"改標題畫面後把版子原樣推回"},et)
 _,q=req('GET'); q=q.get('project',q); g={b['id']:b for b in q['boards']}
