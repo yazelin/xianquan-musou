@@ -14,6 +14,7 @@ def req(m,path='',body=None,et=None):
             if e.code==429: time.sleep(30); continue
             print(e.code,msg); raise
 src,name,summary=sys.argv[1],sys.argv[2],sys.argv[3]
+which=sys.argv[4] if len(sys.argv)>4 else 'both'   # thumb：只換專案縮圖；cover：只換標題畫面封面
 bio=io.BytesIO(); Image.open(src).save(bio,'WEBP',quality=90)
 _,j=req('POST','/media',{"name":name,"mimeType":"image/webp","category":"ui","base64":base64.b64encode(bio.getvalue()).decode()}); url=j['asset']['url']
 time.sleep(4)
@@ -21,11 +22,12 @@ canon=lambda x: json.dumps(x,ensure_ascii=False,sort_keys=True)
 et,p=req('GET'); p=p.get('project',p)
 json.dump(p,open(f'snapshots/cover_{int(time.time())}.json','w'),ensure_ascii=False)
 boards=json.loads(json.dumps(p['boards'])); keep={k:canon(p.get(k)) for k in ('characters','variables','languages','name','description')}; pl=canon(p['settings'].get('plugins'))
-p['settings']['titleCoverImage']=url; p['settings']['projectThumbnail']=url
+if which in ('both','cover'): p['settings']['titleCoverImage']=url
+if which in ('both','thumb'): p['settings']['projectThumbnail']=url
 et,_=req('PUT','',{"project":p,"summary":summary},et)
 for b in boards: et,_=req('PUT','/boards/'+b['id'],{"name":b['name'],"nodes":b['nodes'],"edges":b['edges'],"summary":"換封面後把版子原樣推回"},et)
 _,q=req('GET'); q=q.get('project',q); g={b['id']:b for b in q['boards']}
 for b in boards: assert canon(g[b['id']]['nodes'])==canon(b['nodes']) and canon(g[b['id']]['edges'])==canon(b['edges']),b['id']
 for k,v in keep.items(): assert canon(q.get(k))==v,k
 assert canon(q['settings'].get('plugins'))==pl
-print('OK',q['settings']['titleCoverImage'][-26:],len(boards),'boards verified')
+print('OK','cover',q['settings'].get('titleCoverImage','')[-26:],'thumb',q['settings'].get('projectThumbnail','')[-26:],len(boards),'boards verified')
