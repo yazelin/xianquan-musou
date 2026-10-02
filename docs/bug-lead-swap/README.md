@@ -18,32 +18,42 @@
 3. 在動作地圖上按 Q，換 B 帶隊。
 4. 看左上的血量上限，按 1 放技能：都還是 A 的。
 
-## 原因（rpg-engine-CVycXasz.js，2026-10-01 線上版）
+## 原因（rpg-engine-B2Jm4cvJ.js，2026-10-02 線上版）
+
+10-01 回報時的版本是 `rpg-engine-CVycXasz.js`（換人函式當時叫 `Ks`）。10-02 更新後函式改了名字，行為沒變。
 
 換人帶隊的函式只換了外觀和位置：
 
 ```js
-function Ks(e){const t=x[e];if(!t)return;const o=t.id.slice(6),
-  a={x:y.x,y:y.y,direction:y.direction},i={name:y.name,sprite:y.sprite};
-  Be.delete(t.id),Object.assign(y,{x:t.x,y:t.y,direction:t.direction,name:t.name,sprite:t.sprite}),
-  Object.assign(t,a,i,{id:"party-"+yt}),yt=o,x.push(...x.splice(e,1))}
+function rl(e){const t=Bt[e];if(!t)return;const a=t.id.slice(6),
+  n={x:u.x,y:u.y,direction:u.direction},i={name:u.name,sprite:u.sprite};
+  dt.delete(t.id),Object.assign(u,{x:t.x,y:t.y,direction:t.direction,name:t.name,sprite:t.sprite}),
+  Object.assign(t,n,i,{id:"party-"+Lt}),Lt=a,Bt.push(...Bt.splice(e,1))}
 ```
 
-血量上限、MP 上限、技能都是讀 `He.heroId`（資料庫的主角），不是讀帶隊的人 `yt`：
+血量上限、MP 上限、等級顯示、1～4 技能都是讀 `_e.heroId`（資料庫的主角），不是讀帶隊的人 `Lt`：
 
 ```js
-function ct(){return lt(He?.heroId||"")?.hp||B.hp}                 // 血量上限
-const Wn=()=>(lt(He?.heroId||"")?.mp??20)+le.statsFor(...,"hero")  // MP 上限
-function Yr(){return Dr(He?.heroId||"","hero")}                     // 技能
+function Ft(){return Wn(_e?.heroId||"")?.hp||W.hp}                    // 血量上限
+const wi=()=>(Wn(_e?.heroId||"")?.mp??20)+le.statsFor(...,"hero").mp   // MP 上限
+function o(){const e=Nn(_e?.heroId||"");return e?"Lv "+e+" · ":""}    // 等級顯示
+function Mr(){return Sr(_e?.heroId||"","hero")}                        // 技能
 ```
 
-普攻類型則是照帶隊的人算（`dr(yt)`），所以才會出現「普攻換了、技能沒換」。
+10-02 新加的角色能力（`abilities`）和走路速度（`speed`）則是讀帶隊的人：
 
-Q 鍵綁在玩家的按鍵設定裡（`k.member`），作者沒有辦法關掉，按下去也不會觸發任何事件，所以作者這邊補不了。
+```js
+function Ni(){const e=_e?.actors.find(t=>t.id===ja(Lt))?.abilities;...}  // 能力
+function tt(){const e=Number(_e?.actors.find(t=>t.id===ja(Lt))?.speed)||1;...}  // 速度
+```
+
+所以按 Q 換呂布帶隊以後，普攻、能力、速度變成呂布的，血量、MP、等級、技能還是貂蟬的。新功能讓兩邊對不起來的範圍比 10-01 更大。
+
+Q 鍵綁在玩家的按鍵設定裡（`xe.member`），玩家可以改成別的鍵但不能清空；角色能力的按鍵規定不能用 q，也蓋不掉它。按下去不會觸發任何事件，所以作者這邊補不了。
 
 ## 對照：hero 步驟是完整換人
 
-事件的 hero 步驟（`function rt`）會換 `He.heroId`、記住每個人各自的血量、把裝備存回各自身上，換完血量上限和技能都正確。本作目前用一個 hotkey 道具觸發事件、再用 hero 步驟換人來繞過，但 Q 還是在。
+事件的 hero 步驟（新版 `function ai`）會換 `_e.heroId`、記住每個人各自的血量、把裝備存回各自身上，換完血量上限和技能都正確。本作目前用 C 鍵（一個 hotkey 道具）觸發事件、再用 hero 步驟換人來繞過，但 Q 還是在。
 
 ## 建議
 
