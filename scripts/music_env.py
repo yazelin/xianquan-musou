@@ -12,7 +12,7 @@ WX=lambda i,kind,inten,dark: z(id=i,kind="weather",weather={"kind":kind,"intensi
 BOSS_IN=lambda p: MUS(p+'-bgm',U['boss'],0.55)
 BACK=lambda p:[MUS(p+'-bgmb',MAPBGM,0.35),WX(p+'-wxb','clear',0,0)]
 # 每位王出場的天氣（第一輪 dir-N 與無雙隨機的選項順序一致）
-WEATHER={'dir-1':None,'dir-3':('clear',0,0.18),'dir-5':('clear',0,0.5),'dir-7':('storm',0.25,0.1),'dir-9':('rain',0.75,0.3)}
+WEATHER={'dir-1':None,'dir-3':('clear',0,0.45),'dir-5':('clear',0,0.65),'dir-7':('storm',0.5,0.25),'dir-9':('rain',0.85,0.4)}   # 10-02 實測 0.18 看不出來，調重
 MUSOU=['dir-1','dir-3','dir-5','dir-7','dir-9']
 r=urllib.request.urlopen(urllib.request.Request(base+'/boards/board-main',headers={'Authorization':'Bearer '+K}),timeout=300); rev=int(r.headers.get('X-Larch-Revision'))
 b=json.loads(r.read())['board']; m=json.loads([x for x in b['nodes'] if x['id']=='map-arena'][0]['data']['pluginValues']['map'])
